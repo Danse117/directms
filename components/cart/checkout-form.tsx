@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useActionState, startTransition } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Send } from "lucide-react";
@@ -17,7 +19,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useCartItems } from "./cart-store";
+import { useCartItems, useCartStore } from "./cart-store";
 import {
   placeOrderAction,
   type PlaceOrderState,
@@ -37,6 +39,9 @@ export function CheckoutForm() {
     initialState
   );
   const items = useCartItems();
+  const clearCart = useCartStore((s) => s.clear);
+  const router = useRouter();
+  const lastHandledOrderNumber = useRef<string | undefined>(undefined);
 
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutFormSchema),
@@ -47,6 +52,19 @@ export function CheckoutForm() {
       notes: "",
     },
   });
+
+  // React to a successful order: clear the cart and navigate to the success page.
+  useEffect(() => {
+    if (
+      state.ok &&
+      state.orderNumber &&
+      state.orderNumber !== lastHandledOrderNumber.current
+    ) {
+      lastHandledOrderNumber.current = state.orderNumber;
+      clearCart();
+      router.push(`/order-success?order=${state.orderNumber}`);
+    }
+  }, [state, clearCart, router]);
 
   function onSubmit(values: CheckoutFormValues) {
     if (items.length === 0) {
@@ -63,6 +81,7 @@ export function CheckoutForm() {
     };
     const formData = new FormData();
     formData.set("payload", JSON.stringify(payload));
+    formData.set("website", "");
     startTransition(() => formAction(formData));
   }
 
@@ -139,6 +158,29 @@ export function CheckoutForm() {
             </FormItem>
           )}
         />
+
+        {/* Honeypot — visually hidden, off-tab, autofill-suppressed */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            left: "-10000px",
+            top: "auto",
+            width: "1px",
+            height: "1px",
+            overflow: "hidden",
+          }}
+        >
+          <label htmlFor="website">Website</label>
+          <input
+            id="website"
+            name="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            defaultValue=""
+          />
+        </div>
 
         {state.error && !state.ok ? (
           <p
