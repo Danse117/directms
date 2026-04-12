@@ -1,15 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useCartCount } from "./cart-store";
+import { useIsMounted } from "@/lib/use-is-mounted";
 
 export function CartBadge() {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useIsMounted();
   const count = useCartCount();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const displayed = mounted ? count : 0;
 

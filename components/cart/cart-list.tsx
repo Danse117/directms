@@ -1,19 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { AnimatePresence } from "motion/react";
 import { ShoppingBag } from "lucide-react";
 
 import { CartItem } from "./cart-item";
 import { useCartItems, useCartSubtotal } from "./cart-store";
 import { formatCurrency } from "@/lib/format";
+import { useIsMounted } from "@/lib/use-is-mounted";
 
 export function CartList() {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useIsMounted();
   const items = useCartItems();
   const subtotal = useCartSubtotal();
-
-  useEffect(() => setMounted(true), []);
 
   if (!mounted) {
     return (
