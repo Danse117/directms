@@ -3,7 +3,6 @@
 
 import { inquirySchema, type InquiryInput } from '@/lib/schemas/inquiry'
 import { createInquiry } from '@/lib/data/inquiries'
-import { sendInquiryNotification } from '@/lib/email/send-inquiry-notification'
 
 export type SendInquiryState = {
   ok: boolean
@@ -62,21 +61,6 @@ export async function sendInquiryAction(
       ok: false,
       error: 'Could not send your inquiry. Please try again in a moment.',
     }
-  }
-
-  // 5. Notify admin — log + continue on failure
-  try {
-    await sendInquiryNotification({
-      name: input.name,
-      businessName: input.businessName,
-      email: input.email,
-      phone: input.phone,
-      requestedItem: input.requestedItem,
-      details: input.details,
-    })
-  } catch (err) {
-    console.error('[sendInquiry] sendInquiryNotification failed:', err)
-    // Swallow — inquiry is persisted; admin can spot it in the dashboard
   }
 
   return { ok: true, submittedAt: Date.now() }

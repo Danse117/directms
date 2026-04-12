@@ -1,17 +1,17 @@
 import { Resend } from 'resend'
-import { serverEnv } from '@/lib/env'
 
 let cached: Resend | null = null
 
 /**
- * Lazy singleton Resend client. Lazy because instantiating at module load
- * trips Next.js's static analysis when env vars aren't set yet (e.g.,
- * during the migration tasks before .env.local exists).
+ * Lazy singleton Resend client. Currently unused — email sending is
+ * disabled. Scaffolded for future re-enablement. Reads RESEND_API_KEY
+ * directly from process.env (not from serverEnv, which no longer
+ * validates Resend keys).
  */
 export function getResend(): Resend {
   if (cached) return cached
-  const env = serverEnv()
-  cached = new Resend(env.RESEND_API_KEY)
+  const key = process.env.RESEND_API_KEY ?? ''
+  cached = new Resend(key)
   return cached
 }
 

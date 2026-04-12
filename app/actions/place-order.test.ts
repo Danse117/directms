@@ -7,13 +7,8 @@ vi.mock('@/lib/data/products', () => ({
 vi.mock('@/lib/data/orders', () => ({
   createOrder: vi.fn(),
 }))
-vi.mock('@/lib/email/send-order-receipt', () => ({
-  sendOrderReceipt: vi.fn(),
-}))
-
 const { getProductsByIds } = await import('@/lib/data/products')
 const { createOrder } = await import('@/lib/data/orders')
-const { sendOrderReceipt } = await import('@/lib/email/send-order-receipt')
 
 function buildFormData(payload: unknown, honeypot = '') {
   const fd = new FormData()
@@ -61,8 +56,6 @@ describe('placeOrderAction', () => {
       createdAt: '2026-04-11T12:00:00Z',
       fulfilledAt: null,
     })
-    vi.mocked(sendOrderReceipt).mockResolvedValue(undefined)
-
     const { placeOrderAction } = await import('./place-order')
     const result = await placeOrderAction(
       { ok: false },
@@ -106,10 +99,9 @@ describe('placeOrderAction', () => {
       },
     ])
 
-    expect(sendOrderReceipt).toHaveBeenCalledTimes(1)
   })
 
-  it('returns ok without writing or emailing when the honeypot field is filled', async () => {
+  it('returns ok without writing when the honeypot field is filled', async () => {
     const { placeOrderAction } = await import('./place-order')
     const result = await placeOrderAction(
       { ok: false },
@@ -128,7 +120,6 @@ describe('placeOrderAction', () => {
     expect(result.ok).toBe(true)
     expect(getProductsByIds).not.toHaveBeenCalled()
     expect(createOrder).not.toHaveBeenCalled()
-    expect(sendOrderReceipt).not.toHaveBeenCalled()
   })
 
   it('returns field errors for invalid input', async () => {
@@ -186,46 +177,4 @@ describe('placeOrderAction', () => {
     expect(createOrder).not.toHaveBeenCalled()
   })
 
-  it('does NOT fail the order when the email send fails — order is already persisted', async () => {
-    vi.mocked(getProductsByIds).mockResolvedValue([
-      {
-        id: 'p1',
-        slug: 'mega-v2',
-        name: 'Mega V2',
-        subtitle: null,
-        price: 35,
-        flavors: ['red bull'],
-        imagePath: null,
-      },
-    ])
-    vi.mocked(createOrder).mockResolvedValue({
-      id: 'order-uuid',
-      orderNumber: 'DM-XXX111',
-      firstName: 'Jane',
-      lastName: 'Doe',
-      email: 'jane@example.com',
-      notes: null,
-      items: [],
-      subtotal: 0,
-      status: 'pending',
-      createdAt: '2026-04-11T12:00:00Z',
-      fulfilledAt: null,
-    })
-    vi.mocked(sendOrderReceipt).mockRejectedValue(new Error('Resend down'))
-
-    const { placeOrderAction } = await import('./place-order')
-    const result = await placeOrderAction(
-      { ok: false },
-      buildFormData({
-        firstName: 'Jane',
-        lastName: 'Doe',
-        email: 'jane@example.com',
-        notes: '',
-        items: [{ productId: 'p1', flavor: 'red bull', quantity: 1 }],
-      })
-    )
-
-    expect(result.ok).toBe(true)
-    expect(result.orderNumber).toMatch(/^DM-[A-F0-9]{6}$/)
-  })
 })

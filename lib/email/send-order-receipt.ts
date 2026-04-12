@@ -1,6 +1,5 @@
 // lib/email/send-order-receipt.ts
 import { getResend } from '@/lib/email/resend'
-import { serverEnv } from '@/lib/env'
 import type { OrderItemSnapshot } from '@/lib/data/orders'
 import { OrderReceipt } from './templates/order-receipt'
 
@@ -15,10 +14,9 @@ export type SendOrderReceiptInput = {
 }
 
 export async function sendOrderReceipt(input: SendOrderReceiptInput): Promise<void> {
-  const env = serverEnv()
   const resend = getResend()
   const { error } = await resend.emails.send({
-    from: env.RESEND_FROM_EMAIL,
+    from: process.env.RESEND_FROM_EMAIL ?? '',
     to: input.email,
     subject: `Order received — ${input.orderNumber}`,
     react: OrderReceipt({

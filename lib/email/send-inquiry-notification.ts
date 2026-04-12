@@ -1,6 +1,5 @@
 // lib/email/send-inquiry-notification.ts
 import { getResend } from '@/lib/email/resend'
-import { serverEnv } from '@/lib/env'
 import { InquiryNotification } from './templates/inquiry-notification'
 
 export type SendInquiryNotificationInput = {
@@ -15,11 +14,10 @@ export type SendInquiryNotificationInput = {
 export async function sendInquiryNotification(
   input: SendInquiryNotificationInput
 ): Promise<void> {
-  const env = serverEnv()
   const resend = getResend()
   const { error } = await resend.emails.send({
-    from: env.RESEND_FROM_EMAIL,
-    to: env.ADMIN_NOTIFICATION_EMAIL,
+    from: process.env.RESEND_FROM_EMAIL ?? '',
+    to: process.env.ADMIN_NOTIFICATION_EMAIL ?? '',
     replyTo: input.email,
     subject: `New inquiry: ${input.requestedItem}`,
     react: InquiryNotification({

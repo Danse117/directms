@@ -5,7 +5,6 @@ import { randomBytes } from 'node:crypto'
 import { orderSchema, type OrderInput } from '@/lib/schemas/order'
 import { getProductsByIds } from '@/lib/data/products'
 import { createOrder } from '@/lib/data/orders'
-import { sendOrderReceipt } from '@/lib/email/send-order-receipt'
 
 export type PlaceOrderState = {
   ok: boolean
@@ -100,22 +99,6 @@ export async function placeOrderAction(
       ok: false,
       error: 'Could not save your order. Please try again in a moment.',
     }
-  }
-
-  // 8. Send receipt email — log + continue on failure
-  try {
-    await sendOrderReceipt({
-      orderNumber,
-      firstName: input.firstName,
-      lastName: input.lastName,
-      email: input.email,
-      notes: input.notes ?? null,
-      items: itemsSnapshot,
-      subtotal,
-    })
-  } catch (err) {
-    console.error('[placeOrder] sendOrderReceipt failed:', err)
-    // Intentionally swallow — order is already persisted; admin can resend
   }
 
   return { ok: true, orderNumber }

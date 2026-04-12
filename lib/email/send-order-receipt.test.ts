@@ -5,21 +5,7 @@ vi.mock('@/lib/email/resend', () => ({
   getResend: vi.fn(),
 }))
 
-vi.mock('@/lib/env', () => ({
-  serverEnv: vi.fn(() => ({
-    NEXT_PUBLIC_SUPABASE_URL: 'https://x.supabase.co',
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: 'anon',
-    RESEND_API_KEY: 're_test',
-    RESEND_FROM_EMAIL: 'orders@directms.example',
-    ADMIN_NOTIFICATION_EMAIL: 'admin@directms.example',
-    NEXT_PUBLIC_SITE_URL: 'https://directms.example',
-  })),
-  publicEnv: vi.fn(() => ({
-    NEXT_PUBLIC_SUPABASE_URL: 'https://x.supabase.co',
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: 'anon',
-    NEXT_PUBLIC_SITE_URL: 'https://directms.example',
-  })),
-}))
+process.env.RESEND_FROM_EMAIL = 'orders@directms.example'
 
 const { getResend } = await import('@/lib/email/resend')
 
