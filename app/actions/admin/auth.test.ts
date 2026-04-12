@@ -22,6 +22,7 @@ function buildFormData(data: Record<string, string>): FormData {
 }
 
 function mockSupabaseAuth(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   signInResult: { user: any; session: any } | null,
   signInError: { message: string } | null = null
 ) {
@@ -33,6 +34,7 @@ function mockSupabaseAuth(
       }),
       signOut: vi.fn().mockResolvedValue({ error: null }),
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any)
 }
 

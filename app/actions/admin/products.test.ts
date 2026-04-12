@@ -33,6 +33,7 @@ function mockAuth(user: { id: string; email: string } | null) {
         remove: vi.fn().mockResolvedValue({ error: null }),
       }),
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any)
 }
 
