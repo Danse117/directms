@@ -3,9 +3,11 @@ import { SiteFooter } from "@/components/site/footer";
 import { Hero } from "@/components/site/hero";
 import { ProductGrid } from "@/components/products/product-grid";
 import { InquiryForm } from "@/components/inquiry/inquiry-form";
-import { products } from "@/lib/products.seed";
+import { getVisibleProducts } from "@/lib/data/products";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const products = await getVisibleProducts();
+
   return (
     <>
       <SiteHeader />
