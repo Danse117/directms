@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { useCartStore } from "@/components/cart/cart-store";
 import { formatCurrency } from "@/lib/format";
+import { getProductImageUrl } from "@/lib/supabase/storage";
 import type { Product } from "@/lib/data/products";
 
 export function ProductCard({ product }: { product: Product }) {
@@ -49,13 +50,20 @@ export function ProductCard({ product }: { product: Product }) {
       className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
     >
       <div className="relative aspect-square overflow-hidden bg-secondary">
-        <Image
-          src={product.imagePath ?? ""}
-          alt={product.name}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-contain p-6 transition-transform duration-500 group-hover:scale-[1.03]"
-        />
+        {product.imagePath ? (
+          <Image
+            src={getProductImageUrl(product.imagePath)}
+            alt={product.name}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-contain p-6 transition-transform duration-500 group-hover:scale-[1.03]"
+            unoptimized
+          />
+        ) : (
+          <div className="flex h-full items-center justify-center text-muted-foreground">
+            No image
+          </div>
+        )}
         <Badge
           variant="secondary"
           className="absolute left-4 top-4 bg-card/90 text-foreground shadow-sm backdrop-blur"
