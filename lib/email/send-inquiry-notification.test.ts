@@ -1,0 +1,80 @@
+// lib/email/send-inquiry-notification.test.ts
+import { describe, it, expect, beforeEach, vi } from 'vitest'
+
+vi.mock('@/lib/email/resend', () => ({ getResend: vi.fn() }))
+vi.mock('@/lib/env', () => ({
+  serverEnv: vi.fn(() => ({
+    NEXT_PUBLIC_SUPABASE_URL: 'https://x.supabase.co',
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: 'anon',
+    RESEND_API_KEY: 're_test',
+    RESEND_FROM_EMAIL: 'orders@directms.example',
+    ADMIN_NOTIFICATION_EMAIL: 'admin@directms.example',
+    NEXT_PUBLIC_SITE_URL: 'https://directms.example',
+  })),
+  publicEnv: vi.fn(() => ({})),
+}))
+
+const { getResend } = await import('@/lib/email/resend')
+
+beforeEach(() => {
+  vi.clearAllMocks()
+})
+
+describe('sendInquiryNotification', () => {
+  it('emails the admin with the inquiry details', async () => {
+    const send = vi.fn().mockResolvedValue({ data: { id: 'm1' }, error: null })
+    vi.mocked(getResend).mockReturnValue({ emails: { send } } as never)
+
+    const { sendInquiryNotification } = await import('./send-inquiry-notification')
+    await sendInquiryNotification({
+      name: 'Jane Doe',
+      businessName: 'Acme',
+      email: 'jane@example.com',
+      phone: '+1-555-0100',
+      requestedItem: 'Geek Bar 25k',
+      details: 'Looking for case quantities',
+    })
+
+    expect(send).toHaveBeenCalledTimes(1)
+    const call = send.mock.calls[0][0]
+    expect(call.from).toBe('orders@directms.example')
+    expect(call.to).toBe('admin@directms.example')
+    expect(call.subject).toContain('Geek Bar 25k')
+    expect(call.replyTo).toBe('jane@example.com')
+    expect(call.react).toBeDefined()
+  })
+
+  it('handles missing optional fields gracefully', async () => {
+    const send = vi.fn().mockResolvedValue({ data: { id: 'm1' }, error: null })
+    vi.mocked(getResend).mockReturnValue({ emails: { send } } as never)
+
+    const { sendInquiryNotification } = await import('./send-inquiry-notification')
+    await sendInquiryNotification({
+      name: 'Jane',
+      businessName: undefined,
+      email: 'jane@example.com',
+      phone: undefined,
+      requestedItem: 'X',
+      details: undefined,
+    })
+
+    expect(send).toHaveBeenCalledTimes(1)
+  })
+
+  it('throws when resend returns an error', async () => {
+    const send = vi.fn().mockResolvedValue({ data: null, error: { message: 'boom' } })
+    vi.mocked(getResend).mockReturnValue({ emails: { send } } as never)
+
+    const { sendInquiryNotification } = await import('./send-inquiry-notification')
+    await expect(
+      sendInquiryNotification({
+        name: 'Jane',
+        businessName: undefined,
+        email: 'jane@example.com',
+        phone: undefined,
+        requestedItem: 'X',
+        details: undefined,
+      })
+    ).rejects.toThrow(/boom/)
+  })
+})
