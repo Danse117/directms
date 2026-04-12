@@ -45,7 +45,7 @@ export function CartItem({ item }: { item: CartItemType }) {
               updateQuantity(item.productId, item.flavor, item.quantity - 1)
             }
           >
-            <Minus />
+            <Minus aria-hidden="true" />
           </Button>
           <span className="min-w-[2ch] text-center text-sm font-semibold tabular-nums">
             {item.quantity}
@@ -59,7 +59,7 @@ export function CartItem({ item }: { item: CartItemType }) {
               updateQuantity(item.productId, item.flavor, item.quantity + 1)
             }
           >
-            <Plus />
+            <Plus aria-hidden="true" />
           </Button>
         </div>
 
@@ -74,7 +74,7 @@ export function CartItem({ item }: { item: CartItemType }) {
             aria-label="Remove from cart"
             onClick={() => removeItem(item.productId, item.flavor)}
           >
-            <Trash2 />
+            <Trash2 aria-hidden="true" />
           </Button>
         </div>
       </div>

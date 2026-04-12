@@ -9,7 +9,7 @@ export default function HomePage() {
   return (
     <>
       <SiteHeader />
-      <main className="flex-1">
+      <main id="main" className="flex-1">
         <Hero />
         <ProductGrid products={products} />
         <section

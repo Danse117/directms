@@ -26,7 +26,7 @@ export function CartList() {
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border bg-card p-12 text-center">
-        <ShoppingBag className="size-8 text-muted-foreground" />
+        <ShoppingBag className="size-8 text-muted-foreground" aria-hidden="true" />
         <p className="text-sm font-medium text-foreground">
           Your cart is empty
         </p>

@@ -23,11 +23,11 @@ export default async function OrderSuccessPage({
   return (
     <>
       <SiteHeader />
-      <main className="flex-1">
+      <main id="main" className="flex-1">
         <div className="mx-auto flex max-w-2xl flex-col items-center gap-8 px-6 py-24 text-center">
           <ClearOnMount />
           <div className="flex size-16 items-center justify-center rounded-full bg-primary/10">
-            <CheckCircle2 className="size-8 text-primary" />
+            <CheckCircle2 className="size-8 text-primary" aria-hidden="true" />
           </div>
           <div className="flex flex-col gap-3">
             <h1 className="text-balance text-3xl font-semibold tracking-tight md:text-4xl">
@@ -50,7 +50,7 @@ export default async function OrderSuccessPage({
           <Button asChild size="lg">
             <Link href="/">
               Back to catalog
-              <ArrowRight data-icon="inline-end" />
+              <ArrowRight data-icon="inline-end" aria-hidden="true" />
             </Link>
           </Button>
         </div>

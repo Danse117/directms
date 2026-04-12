@@ -79,7 +79,7 @@ export function InquiryForm() {
               <FormItem>
                 <FormLabel>Full name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Jane Doe" {...field} />
+                  <Input autoComplete="name" placeholder="Jane Doe" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -92,7 +92,7 @@ export function InquiryForm() {
               <FormItem>
                 <FormLabel>Business / store</FormLabel>
                 <FormControl>
-                  <Input placeholder="Optional" {...field} />
+                  <Input autoComplete="organization" placeholder="Optional" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -108,7 +108,13 @@ export function InquiryForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="you@example.com" {...field} />
+                  <Input
+                    type="email"
+                    autoComplete="email"
+                    spellCheck={false}
+                    placeholder="you@example.com"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -121,7 +127,13 @@ export function InquiryForm() {
               <FormItem>
                 <FormLabel>Phone</FormLabel>
                 <FormControl>
-                  <Input type="tel" placeholder="Optional" {...field} />
+                  <Input
+                    type="tel"
+                    autoComplete="tel"
+                    inputMode="tel"
+                    placeholder="Optional"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -165,8 +177,8 @@ export function InquiryForm() {
         />
 
         <Button type="submit" size="lg" disabled={pending} className="w-full">
-          <Send data-icon="inline-start" />
-          {pending ? "Sending..." : "Send inquiry"}
+          <Send data-icon="inline-start" aria-hidden="true" />
+          {pending ? "Sending…" : "Send inquiry"}
         </Button>
       </form>
     </Form>

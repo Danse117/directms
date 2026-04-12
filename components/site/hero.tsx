@@ -42,7 +42,7 @@ export function Hero() {
             variants={item}
             className="inline-flex w-fit items-center gap-2 rounded-full border border-border/80 bg-card/70 px-3 py-1 text-xs font-medium text-muted-foreground shadow-sm"
           >
-            <Sparkles className="size-3.5 text-primary" />
+            <Sparkles className="size-3.5 text-primary" aria-hidden="true" />
             DirectMS wholesale
           </motion.span>
           <motion.h1
@@ -70,7 +70,7 @@ export function Hero() {
               className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-transform hover:-translate-y-0.5 active:translate-y-0"
             >
               Shop now
-              <ArrowRight className="size-4" />
+              <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
             <Link
               href="#inquiry"

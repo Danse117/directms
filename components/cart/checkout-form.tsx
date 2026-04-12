@@ -81,7 +81,7 @@ export function CheckoutForm() {
               <FormItem>
                 <FormLabel>First name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Jane" {...field} />
+                  <Input autoComplete="given-name" placeholder="Jane" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -94,7 +94,7 @@ export function CheckoutForm() {
               <FormItem>
                 <FormLabel>Last name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Doe" {...field} />
+                  <Input autoComplete="family-name" placeholder="Doe" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -111,6 +111,8 @@ export function CheckoutForm() {
               <FormControl>
                 <Input
                   type="email"
+                  autoComplete="email"
+                  spellCheck={false}
                   placeholder="you@example.com"
                   {...field}
                 />
@@ -153,8 +155,8 @@ export function CheckoutForm() {
           disabled={pending || items.length === 0}
           className="w-full"
         >
-          <Send data-icon="inline-start" />
-          {pending ? "Submitting..." : "Submit order"}
+          <Send data-icon="inline-start" aria-hidden="true" />
+          {pending ? "Submitting…" : "Submit order"}
         </Button>
       </form>
     </Form>

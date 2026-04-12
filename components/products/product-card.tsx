@@ -110,6 +110,8 @@ export function ProductCard({ product }: { product: Product }) {
               <Input
                 id={`qty-${product.id}`}
                 type="number"
+                inputMode="numeric"
+                autoComplete="off"
                 min={1}
                 max={999}
                 value={quantity}
@@ -119,7 +121,7 @@ export function ProductCard({ product }: { product: Product }) {
               />
             </div>
             <Button type="submit" className="flex-1" disabled={!flavor}>
-              <Plus data-icon="inline-start" />
+              <Plus data-icon="inline-start" aria-hidden="true" />
               Add to cart
             </Button>
           </div>

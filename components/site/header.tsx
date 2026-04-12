@@ -35,7 +35,7 @@ export function SiteHeader() {
           href="/cart"
           className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
         >
-          <ShoppingBag className="size-4" />
+          <ShoppingBag className="size-4" aria-hidden="true" />
           Cart
           <CartBadge />
         </Link>
