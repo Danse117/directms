@@ -22,8 +22,8 @@ The project ships in three sequential phases — **do not start the next phase u
 
 | Phase | Status | Scope |
 |---|---|---|
-| **Phase 1** — Frontend only | Not started | Hardcoded products, stubbed Server Actions, full UI walkthrough |
-| **Phase 2** — Supabase + Resend | Not started | Real backend, real emails, public site is live |
+| **Phase 1** — Frontend only | Complete | Hardcoded products, stubbed Server Actions, full UI walkthrough |
+| **Phase 2** — Supabase + Resend | Complete | Real backend, Supabase reads/writes, email scaffolded but disabled |
 | **Phase 3** — Admin + Deploy | Not started | Protected admin dashboard + Netlify production deploy |
 
 Update this table as phases progress.
