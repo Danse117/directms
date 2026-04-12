@@ -61,6 +61,7 @@ export function InquiryForm() {
   function onSubmit(values: InquiryInput) {
     const formData = new FormData();
     formData.set("payload", JSON.stringify(values));
+    formData.set("website", "");
     startTransition(() => formAction(formData));
   }
 
@@ -175,6 +176,29 @@ export function InquiryForm() {
             </FormItem>
           )}
         />
+
+        {/* Honeypot — visually hidden, off-tab, autofill-suppressed */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            left: "-10000px",
+            top: "auto",
+            width: "1px",
+            height: "1px",
+            overflow: "hidden",
+          }}
+        >
+          <label htmlFor="inquiry-website">Website</label>
+          <input
+            id="inquiry-website"
+            name="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            defaultValue=""
+          />
+        </div>
 
         <Button type="submit" size="lg" disabled={pending} className="w-full">
           <Send data-icon="inline-start" aria-hidden="true" />

@@ -1,5 +1,5 @@
 import { ProductCard } from "./product-card";
-import type { Product } from "@/lib/products.seed";
+import type { Product } from "@/lib/data/products";
 
 export function ProductGrid({ products }: { products: Product[] }) {
   return (

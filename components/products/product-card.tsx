@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { useCartStore } from "@/components/cart/cart-store";
 import { formatCurrency } from "@/lib/format";
-import type { Product } from "@/lib/products.seed";
+import type { Product } from "@/lib/data/products";
 
 export function ProductCard({ product }: { product: Product }) {
   const addItem = useCartStore((s) => s.addItem);
@@ -50,7 +50,7 @@ export function ProductCard({ product }: { product: Product }) {
     >
       <div className="relative aspect-square overflow-hidden bg-secondary">
         <Image
-          src={product.imagePath}
+          src={product.imagePath ?? ""}
           alt={product.name}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -70,9 +70,11 @@ export function ProductCard({ product }: { product: Product }) {
             <h3 className="text-base font-semibold leading-tight tracking-tight">
               {product.name}
             </h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {product.subtitle}
-            </p>
+            {product.subtitle ? (
+              <p className="mt-1 text-sm text-muted-foreground">
+                {product.subtitle}
+              </p>
+            ) : null}
           </div>
           <span className="shrink-0 text-base font-semibold tabular-nums text-foreground">
             {formatCurrency(product.price)}
