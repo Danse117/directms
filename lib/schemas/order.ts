@@ -9,7 +9,24 @@ export const orderItemSchema = z.object({
 export const orderSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(80),
   lastName: z.string().trim().min(1, "Last name is required").max(80),
-  email: z.string().trim().email("Enter a valid email"),
+  email: z
+    .string()
+    .trim()
+    .email("Enter a valid email")
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
+  phone: z
+    .string()
+    .trim()
+    .max(30, "Phone number is too long")
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
+  storeAddress: z
+    .string()
+    .trim()
+    .max(200, "Address is too long")
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
   notes: z
     .string()
     .trim()

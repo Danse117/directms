@@ -53,6 +53,8 @@ describe('placeOrderAction', () => {
       firstName: 'Jane',
       lastName: 'Doe',
       email: 'jane@example.com',
+      phone: null,
+      storeAddress: null,
       notes: null,
       items: [],
       subtotal: 0,
@@ -103,6 +105,58 @@ describe('placeOrderAction', () => {
       },
     ])
 
+  })
+
+  it('saves order without email when email is omitted', async () => {
+    vi.mocked(getProductsByIds).mockResolvedValue([
+      {
+        id: 'p1',
+        slug: 'mega-v2',
+        name: 'Mega V2',
+        subtitle: null,
+        price: 35,
+        flavors: ['red bull'],
+        imagePath: null,
+        isVisible: true,
+        sortOrder: 0,
+      },
+    ])
+    vi.mocked(createOrder).mockResolvedValue({
+      id: 'order-uuid',
+      orderNumber: 'DM-IGNORED',
+      firstName: 'Jane',
+      lastName: 'Doe',
+      email: null,
+      phone: '555-1234',
+      storeAddress: '123 Main St',
+      notes: null,
+      items: [],
+      subtotal: 0,
+      status: 'pending',
+      createdAt: '2026-04-11T12:00:00Z',
+      fulfilledAt: null,
+    })
+    const { placeOrderAction } = await import('./place-order')
+    const result = await placeOrderAction(
+      { ok: false },
+      buildFormData({
+        firstName: 'Jane',
+        lastName: 'Doe',
+        email: '',
+        phone: '555-1234',
+        storeAddress: '123 Main St',
+        notes: '',
+        items: [
+          { productId: 'p1', flavor: 'red bull', quantity: 1 },
+        ],
+      })
+    )
+
+    expect(result.ok).toBe(true)
+    const createCall = vi.mocked(createOrder).mock.calls[0][0]
+    expect(createCall.email).toBeNull()
+    expect(createCall.phone).toBe('555-1234')
+    expect(createCall.storeAddress).toBe('123 Main St')
   })
 
   it('returns ok without writing when the honeypot field is filled', async () => {

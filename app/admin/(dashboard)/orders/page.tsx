@@ -35,7 +35,7 @@ export default async function AdminOrdersPage() {
               <TableRow>
                 <TableHead>Order #</TableHead>
                 <TableHead>Customer</TableHead>
-                <TableHead>Email</TableHead>
+                <TableHead>Contact</TableHead>
                 <TableHead>Subtotal</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Date</TableHead>
@@ -52,7 +52,7 @@ export default async function AdminOrdersPage() {
                     {order.firstName} {order.lastName}
                   </TableCell>
                   <TableCell className="text-muted-foreground text-sm">
-                    {order.email}
+                    {order.email || order.phone || '—'}
                   </TableCell>
                   <TableCell>
                     ${order.subtotal.toFixed(2)}

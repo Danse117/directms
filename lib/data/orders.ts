@@ -15,7 +15,9 @@ export type Order = {
   orderNumber: string
   firstName: string
   lastName: string
-  email: string
+  email: string | null
+  phone: string | null
+  storeAddress: string | null
   notes: string | null
   items: OrderItemSnapshot[]
   subtotal: number
@@ -29,7 +31,9 @@ type OrderRow = {
   order_number: string
   first_name: string
   last_name: string
-  email: string
+  email: string | null
+  phone_number: string | null
+  store_address: string | null
   notes: string | null
   items: OrderItemSnapshot[]
   subtotal: number | string
@@ -45,6 +49,8 @@ function rowToOrder(row: OrderRow): Order {
     firstName: row.first_name,
     lastName: row.last_name,
     email: row.email,
+    phone: row.phone_number,
+    storeAddress: row.store_address,
     notes: row.notes,
     items: row.items,
     subtotal:
@@ -59,7 +65,9 @@ export type CreateOrderInput = {
   orderNumber: string
   firstName: string
   lastName: string
-  email: string
+  email: string | null
+  phone: string | null
+  storeAddress: string | null
   notes: string | null
   items: OrderItemSnapshot[]
   subtotal: number
@@ -80,6 +88,8 @@ export async function createOrder(input: CreateOrderInput): Promise<Order> {
       first_name: input.firstName,
       last_name: input.lastName,
       email: input.email,
+      phone_number: input.phone,
+      store_address: input.storeAddress,
       notes: input.notes,
       items: input.items,
       subtotal: input.subtotal,

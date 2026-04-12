@@ -47,6 +47,8 @@ describe('createOrder', () => {
       firstName: 'Jane',
       lastName: 'Doe',
       email: 'jane@example.com',
+      phone: null,
+      storeAddress: null,
       notes: null,
       items: [
         {
@@ -71,6 +73,8 @@ describe('createOrder', () => {
           first_name: 'Jane',
           last_name: 'Doe',
           email: 'jane@example.com',
+          phone_number: null,
+          store_address: null,
           notes: null,
           items: [
             {
@@ -108,6 +112,8 @@ describe('createOrder', () => {
         firstName: 'Jane',
         lastName: 'Doe',
         email: 'jane@example.com',
+        phone: null,
+        storeAddress: null,
         notes: null,
         items: [],
         subtotal: 0,

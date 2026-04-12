@@ -49,6 +49,8 @@ export function CheckoutForm() {
       firstName: "",
       lastName: "",
       email: "",
+      phone: "",
+      storeAddress: "",
       notes: "",
     },
   });
@@ -121,18 +123,56 @@ export function CheckoutForm() {
           />
         </div>
 
+        <div className="grid gap-5 sm:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email (optional)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    autoComplete="email"
+                    spellCheck={false}
+                    placeholder="you@example.com"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone (optional)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="tel"
+                    autoComplete="tel"
+                    placeholder="(555) 123-4567"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <FormField
           control={form.control}
-          name="email"
+          name="storeAddress"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Store address (optional)</FormLabel>
               <FormControl>
                 <Input
-                  type="email"
-                  autoComplete="email"
-                  spellCheck={false}
-                  placeholder="you@example.com"
+                  autoComplete="street-address"
+                  placeholder="123 Main St, Suite 100"
                   {...field}
                 />
               </FormControl>

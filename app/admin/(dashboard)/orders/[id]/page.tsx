@@ -67,10 +67,24 @@ export default async function AdminOrderDetailPage({ params }: Props) {
               {order.firstName} {order.lastName}
             </dd>
           </div>
-          <div>
-            <dt className="text-muted-foreground">Email</dt>
-            <dd className="font-medium">{order.email}</dd>
-          </div>
+          {order.email && (
+            <div>
+              <dt className="text-muted-foreground">Email</dt>
+              <dd className="font-medium">{order.email}</dd>
+            </div>
+          )}
+          {order.phone && (
+            <div>
+              <dt className="text-muted-foreground">Phone</dt>
+              <dd className="font-medium">{order.phone}</dd>
+            </div>
+          )}
+          {order.storeAddress && (
+            <div className="sm:col-span-2">
+              <dt className="text-muted-foreground">Store address</dt>
+              <dd className="font-medium">{order.storeAddress}</dd>
+            </div>
+          )}
           {order.notes && (
             <div className="sm:col-span-2">
               <dt className="text-muted-foreground">Notes</dt>
