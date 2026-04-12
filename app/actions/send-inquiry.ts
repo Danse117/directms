@@ -1,41 +1,83 @@
-"use server";
+// app/actions/send-inquiry.ts
+'use server'
 
-import { inquirySchema, type InquiryInput } from "@/lib/schemas/inquiry";
+import { inquirySchema, type InquiryInput } from '@/lib/schemas/inquiry'
+import { createInquiry } from '@/lib/data/inquiries'
+import { sendInquiryNotification } from '@/lib/email/send-inquiry-notification'
 
 export type SendInquiryState = {
-  ok: boolean;
-  error?: string;
-  fieldErrors?: Partial<Record<keyof InquiryInput, string[]>>;
-  submittedAt?: number;
-};
+  ok: boolean
+  error?: string
+  fieldErrors?: Partial<Record<keyof InquiryInput, string[]>>
+  submittedAt?: number
+}
 
 export async function sendInquiryAction(
   _prevState: SendInquiryState,
   formData: FormData
 ): Promise<SendInquiryState> {
-  const raw = formData.get("payload");
-  if (typeof raw !== "string") {
-    return { ok: false, error: "Missing payload" };
+  // 1. Honeypot
+  const honeypot = formData.get('website')
+  if (typeof honeypot === 'string' && honeypot.trim().length > 0) {
+    return { ok: true, submittedAt: Date.now() }
   }
 
-  let parsed: unknown;
+  // 2. Parse JSON payload
+  const raw = formData.get('payload')
+  if (typeof raw !== 'string') {
+    return { ok: false, error: 'Missing payload' }
+  }
+  let parsed: unknown
   try {
-    parsed = JSON.parse(raw);
+    parsed = JSON.parse(raw)
   } catch {
-    return { ok: false, error: "Invalid JSON payload" };
+    return { ok: false, error: 'Invalid JSON payload' }
   }
 
-  const result = inquirySchema.safeParse(parsed);
+  // 3. Zod validate
+  const result = inquirySchema.safeParse(parsed)
   if (!result.success) {
     return {
       ok: false,
-      error: "Please fix the highlighted fields",
+      error: 'Please fix the highlighted fields',
       fieldErrors: result.error.flatten()
-        .fieldErrors as SendInquiryState["fieldErrors"],
-    };
+        .fieldErrors as SendInquiryState['fieldErrors'],
+    }
+  }
+  const input = result.data
+
+  // 4. Insert
+  try {
+    await createInquiry({
+      name: input.name,
+      businessName: input.businessName,
+      email: input.email,
+      phone: input.phone,
+      requestedItem: input.requestedItem,
+      details: input.details,
+    })
+  } catch (err) {
+    console.error('[sendInquiry] createInquiry failed:', err)
+    return {
+      ok: false,
+      error: 'Could not send your inquiry. Please try again in a moment.',
+    }
   }
 
-  // Phase 1 stub — no DB write, no email. Just return ok with a timestamp
-  // so the client can show "Sent!" and the form can reset.
-  return { ok: true, submittedAt: Date.now() };
+  // 5. Notify admin — log + continue on failure
+  try {
+    await sendInquiryNotification({
+      name: input.name,
+      businessName: input.businessName,
+      email: input.email,
+      phone: input.phone,
+      requestedItem: input.requestedItem,
+      details: input.details,
+    })
+  } catch (err) {
+    console.error('[sendInquiry] sendInquiryNotification failed:', err)
+    // Swallow — inquiry is persisted; admin can spot it in the dashboard
+  }
+
+  return { ok: true, submittedAt: Date.now() }
 }
