@@ -9,6 +9,8 @@ export type Product = {
   price: number
   flavors: string[]
   imagePath: string | null
+  isVisible: boolean
+  sortOrder: number
 }
 
 type ProductRow = {
@@ -34,6 +36,8 @@ function rowToProduct(row: ProductRow): Product {
     price: typeof row.price === 'string' ? Number(row.price) : row.price,
     flavors: row.flavors,
     imagePath: row.image_path,
+    isVisible: row.is_visible,
+    sortOrder: row.sort_order,
   }
 }
 

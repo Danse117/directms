@@ -65,6 +65,7 @@ describe('createProductAction', () => {
     vi.mocked(createProduct).mockResolvedValue({
       id: 'p1', slug: 'test-product', name: 'Test Product', subtitle: null,
       price: 25, flavors: ['mint', 'grape'], imagePath: null,
+      isVisible: true, sortOrder: 0,
     })
 
     const { createProductAction } = await import('./products')
@@ -108,6 +109,7 @@ describe('updateProductAction', () => {
     vi.mocked(updateProduct).mockResolvedValue({
       id: 'p1', slug: 'test-product', name: 'Updated', subtitle: null,
       price: 30, flavors: ['mint'], imagePath: null,
+      isVisible: false, sortOrder: 0,
     })
 
     const { updateProductAction } = await import('./products')
@@ -131,6 +133,7 @@ describe('deleteProductAction', () => {
     vi.mocked(getProductById).mockResolvedValue({
       id: 'p1', slug: 'test', name: 'Test', subtitle: null,
       price: 10, flavors: [], imagePath: 'products/old.jpg',
+      isVisible: true, sortOrder: 0,
     })
     const { deleteProductAction } = await import('./products')
     await deleteProductAction('p1')

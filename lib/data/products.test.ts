@@ -62,6 +62,8 @@ describe('getVisibleProducts', () => {
         price: 35,
         flavors: ['red bull', 'cool mint'],
         imagePath: '/products/mega-v2-10-packs.jpg',
+        isVisible: true,
+        sortOrder: 10,
       },
       {
         id: 'uuid-2',
@@ -71,6 +73,8 @@ describe('getVisibleProducts', () => {
         price: 25,
         flavors: ['green apple'],
         imagePath: null,
+        isVisible: true,
+        sortOrder: 50,
       },
     ])
   })

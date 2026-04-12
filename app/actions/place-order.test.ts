@@ -32,6 +32,8 @@ describe('placeOrderAction', () => {
         price: 35, // canonical price from DB
         flavors: ['red bull'],
         imagePath: null,
+        isVisible: true,
+        sortOrder: 0,
       },
       {
         id: 'p2',
@@ -41,6 +43,8 @@ describe('placeOrderAction', () => {
         price: 25,
         flavors: ['green apple'],
         imagePath: null,
+        isVisible: true,
+        sortOrder: 1,
       },
     ])
     vi.mocked(createOrder).mockResolvedValue({
@@ -153,6 +157,8 @@ describe('placeOrderAction', () => {
         price: 35,
         flavors: ['red bull'],
         imagePath: null,
+        isVisible: true,
+        sortOrder: 0,
       },
       // p2 deliberately missing
     ])
