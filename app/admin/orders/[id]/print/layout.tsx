@@ -12,7 +12,9 @@ export default async function PrintLayout({
 }: {
   children: React.ReactNode
 }) {
-  // Defense-in-depth: verify auth server-side (proxy.ts is optimistic).
+  // Strict server-side auth gate. This route is outside the (dashboard) group,
+  // so the dashboard layout's check does not apply here; proxy.ts is optimistic
+  // and not a substitute (see CLAUDE.md invariant #3).
   const supabase = await createServerSupabaseClient()
   const {
     data: { user },
