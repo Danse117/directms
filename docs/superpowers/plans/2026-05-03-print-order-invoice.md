@@ -321,8 +321,6 @@ git commit -m "feat(admin): add PrintOrderButton client component"
 
   .invoice-table th {
     background: white;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
   }
 }
 ```
