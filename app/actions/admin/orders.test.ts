@@ -42,6 +42,7 @@ describe('markOrderFulfilledAction', () => {
 
     expect(markOrderFulfilled).toHaveBeenCalledWith('o1')
     expect(revalidatePath).toHaveBeenCalledWith('/admin/orders')
+    expect(revalidatePath).toHaveBeenCalledWith('/admin/orders/[id]', 'page')
   })
 })
 

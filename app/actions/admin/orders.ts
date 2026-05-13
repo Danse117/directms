@@ -16,6 +16,7 @@ export async function markOrderFulfilledAction(id: string): Promise<void> {
   await requireAuth()
   await markOrderFulfilled(id)
   revalidatePath('/admin/orders')
+  revalidatePath('/admin/orders/[id]', 'page')
 }
 
 export async function deleteOrderAction(id: string): Promise<void> {

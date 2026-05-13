@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, CheckCircle } from 'lucide-react'
 import { getOrderById } from '@/lib/data/orders'
+import { markOrderFulfilledAction } from '@/app/actions/admin/orders'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { PrintOrderButton } from '@/components/admin/print-order-button'
@@ -52,6 +53,19 @@ export default async function AdminOrderDetailPage({ params }: Props) {
         </div>
         <div className="flex items-center gap-3">
           <PrintOrderButton orderId={order.id} variant="default" />
+          {order.status === 'pending' && (
+            <form action={markOrderFulfilledAction.bind(null, order.id)}>
+              <Button
+                variant="outline"
+                size="sm"
+                type="submit"
+                className="text-green-600 hover:text-green-600"
+              >
+                <CheckCircle className="size-4" />
+                Mark fulfilled
+              </Button>
+            </form>
+          )}
           <Badge
             variant={order.status === 'fulfilled' ? 'default' : 'secondary'}
             className="text-sm"
