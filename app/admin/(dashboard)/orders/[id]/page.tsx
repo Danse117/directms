@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react'
 import { getOrderById } from '@/lib/data/orders'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { PrintOrderButton } from '@/components/admin/print-order-button'
 import {
   Table,
   TableBody,
@@ -49,12 +50,15 @@ export default async function AdminOrderDetailPage({ params }: Props) {
             })}
           </p>
         </div>
-        <Badge
-          variant={order.status === 'fulfilled' ? 'default' : 'secondary'}
-          className="text-sm"
-        >
-          {order.status}
-        </Badge>
+        <div className="flex items-center gap-3">
+          <PrintOrderButton orderId={order.id} variant="default" />
+          <Badge
+            variant={order.status === 'fulfilled' ? 'default' : 'secondary'}
+            className="text-sm"
+          >
+            {order.status}
+          </Badge>
+        </div>
       </div>
 
       {/* Customer info */}

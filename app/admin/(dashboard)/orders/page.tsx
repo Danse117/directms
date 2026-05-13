@@ -3,6 +3,7 @@ import { Eye, CheckCircle } from 'lucide-react'
 import { getOrders } from '@/lib/data/orders'
 import { markOrderFulfilledAction, deleteOrderAction } from '@/app/actions/admin/orders'
 import { DeleteDialog } from '@/components/admin/delete-dialog'
+import { PrintOrderButton } from '@/components/admin/print-order-button'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -74,6 +75,8 @@ export default async function AdminOrdersPage() {
                           <Eye className="size-4" />
                         </Link>
                       </Button>
+
+                      <PrintOrderButton orderId={order.id} />
 
                       {order.status === 'pending' && (
                         <form action={markOrderFulfilledAction.bind(null, order.id)}>
